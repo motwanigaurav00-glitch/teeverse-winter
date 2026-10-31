@@ -48,6 +48,7 @@ export default function Home() {
   const [activeCollection, setActiveCollection] = useState<CollectionKey | null>(null);
   const [activeImage, setActiveImage] = useState(0);
   const [enquiryCopied, setEnquiryCopied] = useState(false);
+  const [orderMessage, setOrderMessage] = useState("");
   const [selectedSize, setSelectedSize] = useState("S");
   const activeGallery = activeCollection ? galleries[activeCollection] : null;
   const activeColor = activeGallery?.[activeImage];
@@ -57,8 +58,16 @@ export default function Home() {
     const imageCount = galleries[activeCollection].length;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setActiveCollection(null);
-      if (event.key === "ArrowRight") setActiveImage((image) => (image + 1) % imageCount);
-      if (event.key === "ArrowLeft") setActiveImage((image) => (image - 1 + imageCount) % imageCount);
+      if (event.key === "ArrowRight") {
+        setActiveImage((image) => (image + 1) % imageCount);
+        setOrderMessage("");
+        setEnquiryCopied(false);
+      }
+      if (event.key === "ArrowLeft") {
+        setActiveImage((image) => (image - 1 + imageCount) % imageCount);
+        setOrderMessage("");
+        setEnquiryCopied(false);
+      }
     };
     document.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
@@ -71,26 +80,57 @@ export default function Home() {
   function openCollection(collection: CollectionKey) {
     setActiveImage(0);
     setEnquiryCopied(false);
+    setOrderMessage("");
     setSelectedSize(collectionSizes[collection][0]);
     setActiveCollection(collection);
+  }
+
+  function selectColor(index: number) {
+    setActiveImage(index);
+    setOrderMessage("");
+    setEnquiryCopied(false);
+  }
+
+  function selectSize(size: string) {
+    setSelectedSize(size);
+    setOrderMessage("");
+    setEnquiryCopied(false);
   }
 
   async function enquireAboutHoodie() {
     if (!activeCollection || !activeColor) return;
     const price = activeCollection === "kids" ? "—" : "₹600/-";
     const message = [
-      "Hi TeeVerse! I’d like to enquire about this hoodie:",
+      "Hi TeeVerse! 👋",
+      "",
+      "I am interested in ordering this hoodie.",
+      "",
       `Product: ${hoodieNames[activeCollection]}`,
-      `Collection: ${collectionTitles[activeCollection]}`,
-      `Color: ${activeColor.name}`,
+      `Price: ${price}`,
       `Size: ${selectedSize}`,
+      `Color: ${activeColor.name}`,
       "Material: 300 GSM brushed fleece",
       "Fit: Oversized",
-      `Price: ${price}`,
+      "",
+      "Is this product currently available?",
+      "",
+      "Please share the order details.",
     ].join("\n");
-    window.open("https://www.instagram.com/teeverse.wear?utm_source=ig_web_button_share_sheet&cplk=ZDNlZDc0MzIxNw==", "_blank", "noopener,noreferrer");
+    setOrderMessage(message);
+    setEnquiryCopied(false);
+    window.open("https://ig.me/m/teeverse.wear", "_blank", "noopener,noreferrer");
     try {
       await navigator.clipboard.writeText(message);
+      setEnquiryCopied(true);
+    } catch {
+      setEnquiryCopied(false);
+    }
+  }
+
+  async function copyOrderMessage() {
+    if (!orderMessage) return;
+    try {
+      await navigator.clipboard.writeText(orderMessage);
       setEnquiryCopied(true);
     } catch {
       setEnquiryCopied(false);
@@ -174,8 +214,8 @@ export default function Home() {
           <div className="winter-gallery winter-mens-gallery">
             <div className={`winter-gallery-main winter-mens-gallery-main${activeCollection === "kids" ? " winter-kids-gallery-main" : ""}`}>
               <img src={activeColor.src} alt={activeColor.alt} />
-              <button type="button" className="winter-gallery-arrow previous" onClick={() => setActiveImage((image) => (image - 1 + activeGallery.length) % activeGallery.length)} aria-label="Previous color">←</button>
-              <button type="button" className="winter-gallery-arrow next" onClick={() => setActiveImage((image) => (image + 1) % activeGallery.length)} aria-label="Next color">→</button>
+              <button type="button" className="winter-gallery-arrow previous" onClick={() => selectColor((activeImage - 1 + activeGallery.length) % activeGallery.length)} aria-label="Previous color">←</button>
+              <button type="button" className="winter-gallery-arrow next" onClick={() => selectColor((activeImage + 1) % activeGallery.length)} aria-label="Next color">→</button>
             </div>
           </div>
           <div className="winter-modal-details winter-mens-details">
@@ -185,20 +225,25 @@ export default function Home() {
             <div className="winter-detail-rule" />
             <div className="winter-detail-row winter-color-heading"><span>COLOR</span><strong>{activeColor.name.toUpperCase()}</strong></div>
             <div className="winter-color-palette" role="group" aria-label={`${collectionTitles[activeCollection]} hoodie colors`}>
-              {activeGallery.map((image, index) => <button key={image.name} type="button" className={`winter-palette-option${index === activeImage ? " selected" : ""}`} onClick={() => setActiveImage(index)} aria-label={`Choose ${image.name}`} aria-pressed={index === activeImage} title={image.name}>
+              {activeGallery.map((image, index) => <button key={image.name} type="button" className={`winter-palette-option${index === activeImage ? " selected" : ""}`} onClick={() => selectColor(index)} aria-label={`Choose ${image.name}`} aria-pressed={index === activeImage} title={image.name}>
                 <span className="winter-palette-swatch" style={{ backgroundColor: hoodieSwatchColors[image.name] }} />
                 <span>{image.name}</span>
               </button>)}
             </div>
             <div className="winter-detail-row winter-size-label"><span>SIZE</span><strong>{selectedSize}</strong></div>
             <div className="winter-size-options" role="group" aria-label={`Choose size for ${collectionTitles[activeCollection]}`}>
-              {collectionSizes[activeCollection].map((size) => <button key={size} type="button" className={`winter-size-option${size === selectedSize ? " selected" : ""}`} onClick={() => setSelectedSize(size)} aria-pressed={size === selectedSize}>{size}</button>)}
+              {collectionSizes[activeCollection].map((size) => <button key={size} type="button" className={`winter-size-option${size === selectedSize ? " selected" : ""}`} onClick={() => selectSize(size)} aria-pressed={size === selectedSize}>{size}</button>)}
             </div>
             <div className="winter-detail-row"><span>FABRIC</span><strong>300 GSM · BRUSHED FLEECE</strong></div>
             <div className="winter-detail-row winter-price-row"><span>PRICE</span><strong>{activeCollection === "kids" ? "—" : "₹600/-"}</strong></div>
-            <button type="button" className="winter-shop winter-mens-shop" onClick={enquireAboutHoodie}>SHOP NOW <Arrow /></button>
-            <p className="winter-ig-note">{enquiryCopied ? "Product enquiry copied. Paste it into your Instagram DM." : "Shop Now copies the selected hoodie, color, size, fabric, fit, and price for your Instagram enquiry."}</p>
-            <p className="winter-copy-hint">Instagram opens separately. The message is not sent automatically.</p>
+            <button type="button" className="winter-shop winter-mens-shop" onClick={enquireAboutHoodie}>DM TO ORDER <Arrow /></button>
+            <p className="winter-ig-note">Opens your Instagram DM and prepares the order message for you.</p>
+            {orderMessage && <div className="winter-order-fallback" aria-live="polite">
+              <div className="winter-order-fallback-head"><span>ORDER MESSAGE</span><button type="button" onClick={copyOrderMessage}>{enquiryCopied ? "COPIED" : "COPY MESSAGE"}</button></div>
+              <pre>{orderMessage}</pre>
+              <p>{enquiryCopied ? "Copied. Paste it into the Instagram DM." : "If it was not copied, use Copy Message, then paste it into the Instagram DM."}</p>
+            </div>}
+            <p className="winter-copy-hint">Instagram does not prefill or send the message automatically.</p>
           </div>
         </section>
       </div>}

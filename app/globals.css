@@ -556,6 +556,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid #8f7656; outline-offs
 .winter-modal .winter-shop:hover { background: #393630; }
 .winter-ig-note { margin: 12px 0 0; color: #3d3932; font-size: 9px; line-height: 1.55; }
 .winter-copy-hint { margin: 5px 0 0; color: #969087; font-size: 8px; line-height: 1.5; }
+.winter-order-fallback { min-width: 0; margin-top: 11px; padding: 11px 12px; border: 1px solid var(--winter-rule); background: #fffdfa; }
+.winter-order-fallback-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #817b70; font: 7px "DM Mono", monospace; letter-spacing: .1em; }
+.winter-order-fallback-head button { padding: 4px 0; border: 0; border-bottom: 1px solid #b7ad9e; background: transparent; color: var(--winter-ink); cursor: pointer; font: inherit; letter-spacing: inherit; }
+.winter-order-fallback pre { max-height: 126px; overflow: auto; margin: 9px 0 7px; color: #48443d; font: 8px/1.55 "DM Sans", Arial, sans-serif; white-space: pre-wrap; }
+.winter-order-fallback > p { margin: 0; color: #969087; font-size: 8px; line-height: 1.5; }
 @keyframes winter-fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes winter-modal-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
 @keyframes winter-image-in { from { opacity: .7; } to { opacity: 1; } }
