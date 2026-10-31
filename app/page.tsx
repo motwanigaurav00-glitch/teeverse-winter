@@ -56,8 +56,6 @@ export default function Home() {
   const activeColor = activeGallery?.[activeImage];
   const selectedColor = activeGallery && selectedColorIndex !== null ? activeGallery[selectedColorIndex] : null;
   const orderReady = Boolean(activeCollection && selectedColor && selectedSize);
-  const unitPrice = activeCollection === "kids" ? null : 600;
-  const formatPrice = (amount: number | null) => amount === null ? "—" : `₹${amount.toLocaleString("en-IN")}/-`;
   const orderMessage = orderReady && activeCollection && selectedColor ? [
     "Hi TeeVerse! 👋",
     "",
@@ -66,13 +64,12 @@ export default function Home() {
     `Product: ${hoodieNames[activeCollection]}`,
     `Color: ${selectedColor.name}`,
     `Size: ${selectedSize}`,
-    `Unit Price: ${formatPrice(unitPrice)}`,
     `Quantity: ${quantity}`,
-    `Total Price: ${formatPrice(unitPrice === null ? null : unitPrice * quantity)}`,
     "Material: 300 GSM brushed fleece",
     "Fit: Oversized",
     "",
-    "Is this product available?",
+    "What is the price of this product?",
+    "Is this product currently available?",
     "",
     "Please confirm my order.",
   ].join("\n") : "";
@@ -250,8 +247,6 @@ export default function Home() {
               <button type="button" onClick={() => changeQuantity(quantity + 1)} aria-label="Increase quantity">+</button>
             </div>
             <div className="winter-detail-row"><span>FABRIC</span><strong>300 GSM · BRUSHED FLEECE</strong></div>
-            <div className="winter-detail-row winter-price-row"><span>UNIT PRICE</span><strong>{formatPrice(unitPrice)}</strong></div>
-            <div className="winter-detail-row winter-total-row"><span>TOTAL PRICE</span><strong>{formatPrice(unitPrice === null ? null : unitPrice * quantity)}</strong></div>
             <button type="button" className="winter-shop winter-mens-shop" onClick={enquireAboutHoodie}>DM TO ORDER <Arrow /></button>
             {orderMessage ? <div className="winter-order-fallback" aria-live="polite">
               <div className="winter-order-fallback-head"><span>ORDER MESSAGE</span></div>
