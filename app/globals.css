@@ -524,7 +524,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #8f7656; outline-offs
 .winter-product-title small { color: var(--winter-muted); font-size: 9px; line-height: 1.5; }
 .winter-product-title > .winter-arrow { flex: 0 0 auto; color: #77746e; }
 .winter-modal-backdrop { position: fixed; z-index: 40; inset: 0; display: grid; place-items: center; padding: 24px; background: #11110fd9; backdrop-filter: blur(7px); animation: winter-fade-in .24s ease both; }
-.winter-modal { position: relative; display: grid; width: min(1020px, 100%); max-height: min(780px, calc(100svh - 48px)); grid-template-columns: 1.05fr .95fr; overflow: auto; background: var(--winter-paper); box-shadow: 0 26px 90px #0005; animation: winter-modal-in .32s cubic-bezier(.2,.75,.2,1) both; }
+.winter-modal { position: relative; display: grid; width: min(1020px, 100%); height: min(780px, calc(100svh - 48px)); max-height: min(780px, calc(100svh - 48px)); grid-template-columns: 1.05fr .95fr; overflow: hidden; background: var(--winter-paper); box-shadow: 0 26px 90px #0005; animation: winter-modal-in .32s cubic-bezier(.2,.75,.2,1) both; }
 .winter-modal-close { position: absolute; z-index: 3; top: 14px; right: 14px; display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid #d2cec5; border-radius: 50%; background: var(--winter-paper); cursor: pointer; font-size: 25px; line-height: 1; transition: background .2s, transform .2s; }
 .winter-modal-close:hover { transform: rotate(90deg); background: white; }
 .winter-gallery { min-width: 0; padding: 20px; background: #e7e3dc; }
@@ -626,7 +626,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid #8f7656; outline-offs
 .winter-mens-modal { width: min(1060px, calc(100vw - 48px)); grid-template-columns: minmax(0, 1.02fr) minmax(360px, .98fr); }
 .winter-mens-gallery { display: flex; min-width: 0; align-items: center; justify-content: center; padding: 28px; }
 .winter-mens-gallery-main { width: min(100%, 460px); margin-inline: auto; }
-.winter-mens-details { min-width: 0; padding: clamp(30px, 3.8vw, 50px); }
+.winter-mens-details { min-width: 0; min-height: 0; padding: clamp(30px, 3.8vw, 50px); overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; justify-content: flex-start; }
+.winter-mens-gallery { min-height: 0; overflow: hidden; }
 .winter-mens-gallery { background: #e3e0d9; }
 .winter-mens-gallery-main { height: auto; min-height: 0; aspect-ratio: 4 / 5; max-height: min(70vh, 620px); background: #d8d5ce; }
 .winter-kids-gallery-main { aspect-ratio: 2 / 3; }
@@ -675,7 +676,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid #8f7656; outline-offs
   .winter-category-description { font-size: 10px; }
   .winter-category-link { margin-top: 6px; padding-top: 13px; font-size: 8px; }
   .winter-mens-modal { display: flex; }
+  .winter-modal { height: min(94svh, 860px); max-height: 94svh; overflow-x: hidden; overflow-y: auto; }
   .winter-mens-gallery-main { width: min(100%, 340px); height: auto; min-height: 0; max-height: none; margin-inline: auto; aspect-ratio: 4 / 5; }
+  .winter-mens-details { min-height: auto; overflow: visible; overscroll-behavior-y: auto; flex: none; }
   .winter-kids-gallery-main { aspect-ratio: 2 / 3; }
   .winter-mens-gallery .winter-thumbnail { aspect-ratio: 1.06; }
   .winter-mens-gallery .winter-thumbnail span { font-size: 5px; }
