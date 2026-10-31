@@ -1,0 +1,11 @@
+node_modules
+.next
+.pnpm-store
+.env*
+
+/dist/
+/build/
+/out/
+/coverage/
+.vercel/
+*.tsbuildinfo
